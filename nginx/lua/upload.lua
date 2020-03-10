@@ -1,4 +1,5 @@
 local upload = require "resty.upload"
+local common = require "common"
 
 local chunk_size = 4096
 local form, err = upload:new(chunk_size)
@@ -8,24 +9,11 @@ if not form then
 end
 local file
 
-function get_ip()
-    local ip = ngx.var.http_x_real_ip or ngx.var.http_x_forwarded_for or ngx.var.remote_addr or "0.0.0.0"
-    return ip
-end
-
-function mkdir(path)
-    local dir = io.open(path, "w+")
-    if not dir then
-        os.execute("mkdir " .. path)
-    else
-        dir:close()
-    end
-end
-
 function get_filename(res)
     local filename = ngx.re.match(res,'(.+)filename="(.+)"(.*)')
-    local path = ngx.var.store_dir .. ngx.md5(get_ip()) .. '/'
-    mkdir(path)
+    local ip = ngx.re.match(common.get_ip(),"[0-9]+.[0-9]+.[0-9]+.([0-9]+)")
+    local path = ngx.var.store_dir .. ip[1] .. '/'
+    common.mkdir(path)
     if filename then
         --不同的ip存放的目录不同--
         return path .. filename[2]

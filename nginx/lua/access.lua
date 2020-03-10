@@ -8,9 +8,10 @@ local common = require "common"
 
 local ip = ngx.re.match(common.get_ip(),"[0-9]+.[0-9]+.[0-9]+.([0-9]+)")
 local id = ngx.re.match(ngx.var.sub_path, "([0-9]+)(.*)")
-
-if id then
-    if ip[1] ~= id[1] then
-        ngx.exit(ngx.HTTP_BAD_REQUEST)
+if string.find(ngx.var.sub_path, '/') then
+    if id then
+        if ip[1] ~= id[1] then
+            ngx.exit(ngx.HTTP_BAD_REQUEST)
+        end
     end
 end

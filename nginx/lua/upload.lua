@@ -12,7 +12,10 @@ local file
 function get_filename(res)
     local filename = ngx.re.match(res,'(.+)filename="(.+)"(.*)')
     local ip = ngx.re.match(common.get_ip(),"[0-9]+.[0-9]+.[0-9]+.([0-9]+)")
-    local path = ngx.var.store_dir .. ip[1] .. '/'
+    local path = ngx.var.store_dir
+    if ngx.var.is_private ~= "" then
+        path = path .. ip[1] .. '/'
+    end
     common.mkdir(path)
     if filename then
         --不同的ip存放的目录不同--

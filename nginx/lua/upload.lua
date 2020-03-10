@@ -8,10 +8,27 @@ if not form then
 end
 local file
 
-function get_file_name(res)
+function get_ip()
+    local ip = ngx.var.http_x_real_ip or ngx.var.http_x_forwarded_for or ngx.var.remote_addr or "0.0.0.0"
+    return ip
+end
+
+function mkdir(path)
+    local dir = io.open(path, "w+")
+    if not dir then
+        os.execute("mkdir " .. path)
+    else
+        dir:close()
+    end
+end
+
+function get_filename(res)
     local filename = ngx.re.match(res,'(.+)filename="(.+)"(.*)')
+    local path = ngx.var.store_dir .. ngx.md5(get_ip()) .. '/'
+    mkdir(path)
     if filename then
-        return ngx.var.store_dir .. filename[2]
+        --不同的ip存放的目录不同--
+        return path .. filename[2]
     end
 end
 
@@ -25,7 +42,7 @@ while true do
 
     if typ == "header" then
         if res[1] == "Content-Disposition" then
-            local file_name = get_file_name(res[2])
+            local file_name = get_filename(res[2])
             if file_name then
                 file = io.open(file_name, "w+")
                 if not file then

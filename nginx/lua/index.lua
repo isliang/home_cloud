@@ -26,19 +26,28 @@ template.render([[
 </head>
 <body>
 <div style="width:100%;text-align:center">
-    <a href="/download"> 下载区</a>
+    <a href="/download">文件列表</a>
 </div>
 
 <div style="width:100%;text-align:center">
     <fieldset>
         <p>上传文件</p>
-        <form class="upload" action="/upload" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file"/>
-        <input type="hidden" name="is_private" value="1">
-        <input type="submit" value="提交" />
+        <form id="upload" action="/upload?is_private=1" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file"/>
+            <select name="is_private" id="pri">
+                <option value="1">私密上传</option>
+                <option value="0">公开上传</option>
+            </select>
+            <input type="submit" value="提交" />
         </form>
     </fieldset>
 </div>
 </body>
+<script>
+    var pri = document.getElementById("pri");
+    pri.onchange = function () {
+        document.getElementById("upload").action = "/upload?is_private=" + this.value;
+    }
+</script>
 </html>
 ]])

@@ -13,7 +13,8 @@ function get_filename(res)
     local filename = ngx.re.match(res,'(.+)filename="(.+)"(.*)')
     local ip = ngx.re.match(common.get_ip(),"[0-9]+.[0-9]+.[0-9]+.([0-9]+)")
     local path = ngx.var.store_dir
-    if ngx.var.is_private ~= "" then
+    local arg = ngx.req.get_uri_args()
+    if arg["is_private"] == "1" then
         path = path .. ip[1] .. '/'
     end
     common.mkdir(path)

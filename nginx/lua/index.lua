@@ -1,0 +1,29 @@
+local template = require "resty.template"
+
+template.render([[
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>家庭云盘</title>
+</head>
+<body>
+<div>
+    <a href=/download> 下载区</a>
+</div>
+<div>
+    <form action="/upload" method="POST" enctype="multipart/form-data"/>
+    <p>选择文件: <input type="file" name="file"/></p>
+    <input type="submit" value="公开提交" />
+    </form>
+</div>
+
+<div>
+    <form action="/upload/" method="POST" enctype="multipart/form-data"/>
+    <p>选择文件: <input type="file" name="file"/></p>
+    <input type="submit" value="私密提交" />
+    </form>
+</div>
+</body>
+</html>
+]])

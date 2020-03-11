@@ -14,6 +14,10 @@
 
 为了方便访问，可以用一个简短好记的域名，然后在路由器上绑定hosts即可
 
+### 依赖
+
+使用模板引擎[lua-resty-template](https://github.com/bungle/lua-resty-template)渲染html，需要先安装lua-resty-template
+
 ### 后续
 
 现在存在的问题：

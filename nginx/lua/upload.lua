@@ -40,9 +40,6 @@ while true do
                     ngx.say("failed to open file ", file_name)
                     return
                 end
-            else
-                ngx.say("failed to parse filename")
-                return
             end
         end
     elseif typ == "body" then
@@ -51,8 +48,10 @@ while true do
         end
 
     elseif typ == "part_end" then
-        file:close()
-        file = nil
+        if file then
+            file:close()
+            file = nil
+        end
     elseif typ == "eof" then
         ngx.say("upload success!")
         break
